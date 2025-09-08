@@ -3,475 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Sheet</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#E50914">
+    <title>Attendance App</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #141414;
-            color: #e5e5e5;
+            background: linear-gradient(to bottom, #d1d5db, #f3f4f6);
         }
         .container {
-            max-width: 420px;
+            max-width: 600px;
             margin: auto;
             padding: 1rem;
         }
         .card {
-            background-color: #1e1e1e;
-            border-radius: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #333333;
-        }
-        .input-group {
-            margin-bottom: 1rem;
-        }
-        .input-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #aaaaaa;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #3d3d3d;
-            border-radius: 0.75rem;
-            outline: none;
-            transition: all 0.2s ease-in-out;
-            background-color: #2c2c2c;
-            color: #e5e5e5;
-        }
-        .input-group input:focus {
-            border-color: #E50914;
-            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.5);
-        }
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-        }
-        .btn-primary {
-            background: linear-gradient(to right, #E50914, #B80710);
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(to right, #B80710, #A0060C);
-        }
-        .btn-secondary {
-            background-color: #333333;
-            color: #e5e5e5;
-        }
-        .btn-secondary:hover {
-            background-color: #424242;
-        }
-        .text-info {
-            color: #718096;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #3d3d3d;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        .result-item span:first-child {
-            font-weight: 600;
-            color: #bdbdbd;
-        }
-        .result-item span:last-child {
-            font-weight: 500;
-            color: #ffffff;
-        }
-        .chart-container {
-            position: relative;
-            height: 250px;
-            width: 100%;
-        }
-        #messageBox {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1e1e1e;
+            background-color: white;
             padding: 1.5rem;
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            text-align: center;
-            display: none;
-            color: #e5e5e5;
+            margin-bottom: 1.5rem;
         }
-        #messageBoxOverlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: none;
-        }
-        #threeDContainer {
-            width: 100%;
-            height: 200px;
-            border-radius: 1rem;
-            background-color: #2c2c2c;
-            overflow: hidden;
-            cursor: grab;
+        .input-group label {
+            font-weight: 600;
         }
     </style>
 </head>
-<body class="p-4">
+<body class="bg-gray-100">
 
-    <div class="container">
-        <h1 class="text-3xl font-bold text-center mb-6 text-white">Attendance Sheet</h1>
-        
-        <div id="mainPage">
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4 text-white">Salary Details</h2>
-                <div class="input-group">
-                    <label for="dailyWage">Daily Salary</label>
-                    <input type="number" id="dailyWage" value="1000" inputmode="numeric">
+    <div class="container p-4">
+
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Attendance Tracker</h1>
+            <p class="text-gray-600 mt-2">Apni attendance record karein</p>
+        </header>
+
+        <!-- Main Card -->
+        <div id="main-card" class="card">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Attendance Record</h2>
+            
+            <!-- Date Input -->
+            <div class="mb-4">
+                <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                <input type="date" id="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Time Inputs -->
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label for="inTime" class="block text-sm font-medium text-gray-700">In Time</label>
+                    <input type="time" id="inTime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
-                <div class="input-group">
-                    <label for="overtimeRate">Overtime Rate (per hour)</label>
-                    <input type="number" id="overtimeRate" value="150" inputmode="numeric">
+                <div class="flex-1">
+                    <label for="outTime" class="block text-sm font-medium text-gray-700">Out Time</label>
+                    <input type="time" id="outTime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
             </div>
-    
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4 text-white">Today's Attendance</h2>
-                <div class="input-group">
-                    <label for="dateInput">Date</label>
-                    <input type="date" id="dateInput">
-                </div>
-                <div class="input-group">
-                    <label for="inTime">In Time</label>
-                    <input type="time" id="inTime">
-                </div>
-                <div class="input-group">
-                    <label for="outTime">Out Time</label>
-                    <input type="time" id="outTime">
-                </div>
-                <button id="saveBtn" class="btn btn-primary mb-4">Save</button>
+
+            <!-- Salary Settings -->
+            <div class="mb-4">
+                <label for="hourlyRate" class="block text-sm font-medium text-gray-700">Salary Per Hour</label>
+                <input type="number" id="hourlyRate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="10">
             </div>
-    
-            <div class="flex justify-center mb-4">
-                <button id="viewPerformanceBtn" class="btn btn-secondary w-full">View Performance</button>
+
+            <!-- Buttons -->
+            <div class="flex gap-4">
+                <button id="saveBtn" class="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+                <button id="viewBtn" class="flex-1 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    View Performance
+                </button>
             </div>
         </div>
 
-        <div id="performancePage" class="hidden">
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4 text-white">Performance Overview</h2>
-                <div class="result-item"><span>Total Hours Worked</span><span id="totalHours" class="text-red-500 font-bold">0</span></div>
-                <div class="result-item"><span>Overtime (Hours)</span><span id="overtimeHours" class="text-green-500 font-bold">0</span></div>
-                <div class="result-item"><span>Total Present Days</span><span id="presentDays" class="text-blue-500 font-bold">0</span></div>
-                <div class="result-item"><span>Total Absent Days</span><span id="absentDays" class="text-red-500 font-bold">0</span></div>
-                <div class="result-item"><span>Total Salary</span><span id="totalSalary" class="text-green-500 font-bold">0</span></div>
-                <div class="chart-container mt-4"><canvas id="performanceChart"></canvas></div>
-            </div>
+        <!-- Performance Overview Card -->
+        <div id="performance-card" class="card hidden">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Performance Overview</h2>
             
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4 text-white">Attendance Visualization</h2>
-                <div id="threeDContainer"><canvas id="threeDCanvas"></canvas></div>
-            </div>
-    
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4 text-white">Attendance History</h2>
-                <ul id="attendanceList"><p class="text-center text-gray-500">Your attendance details will appear here.</p></ul>
-                <div class="flex space-x-4 mt-4">
-                    <button id="clearBtn" class="btn btn-secondary flex-1">Clear Data</button>
-                    <button id="exportBtn" class="btn btn-secondary flex-1">Copy Text</button>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span class="font-medium text-gray-600">Total Present Days:</span>
+                    <span id="totalPresentDays" class="font-bold text-lg text-blue-600">0</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span class="font-medium text-gray-600">Total Hours:</span>
+                    <span id="totalHours" class="font-bold text-lg text-green-600">0</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span class="font-medium text-gray-600">Overtime Hours:</span>
+                    <span id="totalOvertimeHours" class="font-bold text-lg text-yellow-600">0</span>
+                </div>
+                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span class="font-medium text-gray-600">Salary:</span>
+                    <span id="totalSalary" class="font-bold text-lg text-purple-600">Rs. 0</span>
                 </div>
             </div>
-            
-            <div class="flex justify-center mb-4">
-                <button id="backBtn" class="btn btn-secondary w-full">Back</button>
+
+            <div class="mt-6 flex gap-4">
+                <button id="backBtn" class="flex-1 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Back
+                </button>
+                <button id="copyBtn" class="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Copy to Clipboard
+                </button>
+                <button id="clearBtn" class="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Clear Data
+                </button>
             </div>
         </div>
         
-        <p class="text-info">All data is saved securely on your device.</p>
+        <!-- Message Box for user notifications -->
+        <div id="messageBox" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300"></div>
+
     </div>
 
-    <div id="messageBoxOverlay"></div>
-    <div id="messageBox">
-        <p id="messageText" class="mb-4"></p>
-        <button id="messageOkBtn" class="btn btn-primary w-24">OK</button>
-    </div>
-
+    <!-- JavaScript -->
     <script>
-        // Service Worker ko register karna, jo app ko offline banata hai.
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js').then(registration => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                }).catch(err => {
-                    console.log('Service Worker registration failed:', err);
-                });
-            });
-        }
-        const $ = (selector) => document.querySelector(selector);
-        const mainPage = $('#mainPage');
-        const performancePage = $('#performancePage');
-        const viewPerformanceBtn = $('#viewPerformanceBtn');
-        const backBtn = $('#backBtn');
-        const dateInput = $('#dateInput');
-        const inTimeInput = $('#inTime');
-        const outTimeInput = $('#outTime');
-        const saveBtn = $('#saveBtn');
-        const clearBtn = $('#clearBtn');
-        const exportBtn = $('#exportBtn');
-        const dailyWageInput = $('#dailyWage');
-        const overtimeRateInput = $('#overtimeRate');
-        const attendanceList = $('#attendanceList');
-        const totalHoursEl = $('#totalHours');
-        const overtimeHoursEl = $('#overtimeHours');
-        const presentDaysEl = $('#presentDays');
-        const absentDaysEl = $('#absentDays');
-        const totalSalaryEl = $('#totalSalary');
-        const messageBox = $('#messageBox');
-        const messageText = $('#messageText');
-        const messageOkBtn = $('#messageOkBtn');
-        const messageBoxOverlay = $('#messageBoxOverlay');
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveBtn = document.getElementById('saveBtn');
+            const viewBtn = document.getElementById('viewBtn');
+            const backBtn = document.getElementById('backBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const dateInput = document.getElementById('date');
+            const inTimeInput = document.getElementById('inTime');
+            const outTimeInput = document.getElementById('outTime');
+            const hourlyRateInput = document.getElementById('hourlyRate');
+            const mainCard = document.getElementById('main-card');
+            const performanceCard = document.getElementById('performance-card');
+            const totalPresentDaysElement = document.getElementById('totalPresentDays');
+            const totalHoursElement = document.getElementById('totalHours');
+            const totalOvertimeHoursElement = document.getElementById('totalOvertimeHours');
+            const totalSalaryElement = document.getElementById('totalSalary');
+            const messageBox = document.getElementById('messageBox');
 
-        const STANDARD_WORK_HOURS = 8;
-        let myChart;
-        let attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || {};
-        let settings = JSON.parse(localStorage.getItem('settings')) || { dailyWage: 1000, overtimeRate: 150 };
+            const ATTENDANCE_KEY = 'attendanceData';
 
-        function showMessage(text, onOk) {
-            messageText.textContent = text;
-            messageBox.style.display = 'block';
-            messageBoxOverlay.style.display = 'block';
-            messageOkBtn.onclick = onOk || hideMessage;
-        }
-
-        function hideMessage() {
-            messageBox.style.display = 'none';
-            messageBoxOverlay.style.display = 'none';
-        }
-
-        function calculateHours(inTime, outTime) {
-            if (!inTime || !outTime) return 0;
-            const inDate = new Date(`1970-01-01T${inTime}`);
-            const outDate = new Date(`1970-01-01T${outTime}`);
-            return Math.max(0, (outDate - inDate) / 36e5);
-        }
-
-        function saveEntry() {
-            const date = dateInput.value;
-            const inTime = inTimeInput.value;
-            const outTime = outTimeInput.value;
-
-            if (!date || !inTime || !outTime) {
-                return showMessage('Please fill in all time and date fields.');
+            function showMessage(message) {
+                messageBox.textContent = message;
+                messageBox.classList.remove('opacity-0');
+                messageBox.classList.add('opacity-100');
+                setTimeout(() => {
+                    messageBox.classList.remove('opacity-100');
+                    messageBox.classList.add('opacity-0');
+                }, 3000);
             }
 
-            const workedHours = calculateHours(inTime, outTime);
-            const overtimeHours = Math.max(0, workedHours - STANDARD_WORK_HOURS);
-            const dailySalary = parseFloat(settings.dailyWage) + (overtimeHours * parseFloat(settings.overtimeRate));
-
-            attendanceData[date] = {
-                in: inTime,
-                out: outTime,
-                workedHours: workedHours.toFixed(2),
-                overtimeHours: overtimeHours.toFixed(2),
-                salary: dailySalary.toFixed(2)
-            };
-
-            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
-            showMessage('Attendance saved successfully!');
-            renderAll();
-        }
-
-        function renderAll() {
-            const sortedDates = Object.keys(attendanceData).sort((a, b) => new Date(b) - new Date(a));
-            attendanceList.innerHTML = '';
-            let totalHours = 0, totalOvertime = 0, totalSalary = 0;
-
-            if (sortedDates.length === 0) {
-                attendanceList.innerHTML = '<p class="text-center text-gray-500">No attendance records yet.</p>';
+            function loadEntries() {
+                const data = localStorage.getItem(ATTENDANCE_KEY);
+                return data ? JSON.parse(data) : [];
             }
 
-            sortedDates.forEach(date => {
-                const entry = attendanceData[date];
-                const li = document.createElement('li');
-                li.className = 'card bg-[#1e1e1e] mb-2 p-3';
-                li.innerHTML = `
-                    <div class="flex justify-between w-full items-center">
-                        <span class="font-bold text-white">${date}</span>
-                        <span class="text-gray-400 text-sm">${entry.in} - ${entry.out}</span>
-                    </div>
-                    <div class="flex justify-between w-full text-sm mt-2">
-                        <span>Hours: <span class="font-medium text-red-500">${entry.workedHours}</span></span>
-                        <span>Overtime: <span class="font-medium text-green-500">${entry.overtimeHours}</span></span>
-                        <span>Salary: <span class="font-medium text-green-500">${entry.salary}</span></span>
-                    </div>`;
-                attendanceList.appendChild(li);
-                totalHours += parseFloat(entry.workedHours);
-                totalOvertime += parseFloat(entry.overtimeHours);
-                totalSalary += parseFloat(entry.salary);
-            });
+            function saveEntries(entries) {
+                localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(entries));
+            }
 
-            totalHoursEl.textContent = totalHours.toFixed(2);
-            overtimeHoursEl.textContent = totalOvertime.toFixed(2);
-            presentDaysEl.textContent = sortedDates.length;
-            totalSalaryEl.textContent = totalSalary.toFixed(2);
+            function calculateTimeAndSalary(attendance) {
+                let totalMinutes = 0;
+                let totalPresentDays = 0;
+                let totalOvertimeMinutes = 0;
+                const dailyWorkingMinutes = 8 * 60; // 8 hours in minutes
+                const hourlyRate = parseFloat(hourlyRateInput.value) || 0;
+                const overtimeRate = hourlyRate * 1.5;
 
-            let absentCount = 0;
-            if (sortedDates.length > 1) {
-                const firstDate = new Date(sortedDates[sortedDates.length - 1]);
-                const lastDate = new Date(sortedDates[0]);
-                for (let d = firstDate; d <= lastDate; d.setDate(d.getDate() + 1)) {
-                    if (!attendanceData[d.toISOString().slice(0, 10)]) absentCount++;
+                for (const record of attendance) {
+                    if (record.inTime && record.outTime) {
+                        totalPresentDays++;
+                        
+                        const [inHour, inMinute] = record.inTime.split(':').map(Number);
+                        const [outHour, outMinute] = record.outTime.split(':').map(Number);
+
+                        let dailyMinutes = (outHour * 60 + outMinute) - (inHour * 60 + inMinute);
+
+                        if (dailyMinutes < 0) {
+                            dailyMinutes += 24 * 60; // Handle overnight shifts
+                        }
+
+                        totalMinutes += dailyMinutes;
+
+                        if (dailyMinutes > dailyWorkingMinutes) {
+                            totalOvertimeMinutes += dailyMinutes - dailyWorkingMinutes;
+                        }
+                    }
                 }
-            }
-            absentDaysEl.textContent = absentCount;
-            renderChart();
-            update3D(totalHours);
-        }
 
-        function renderChart() {
-            const sortedDates = Object.keys(attendanceData).sort((a, b) => new Date(a) - new Date(b));
-            const ctx = $('#performanceChart').getContext('2d');
-            if (myChart) myChart.destroy();
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: sortedDates,
-                    datasets: [{
-                        label: 'Worked Hours',
-                        data: sortedDates.map(d => attendanceData[d].workedHours),
-                        backgroundColor: 'rgba(229, 9, 20, 0.8)'
-                    }, {
-                        label: 'Overtime Hours',
-                        data: sortedDates.map(d => attendanceData[d].overtimeHours),
-                        backgroundColor: 'rgba(76, 175, 80, 0.8)'
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#e5e5e5' } },
-                        x: { grid: { display: false }, ticks: { color: '#e5e5e5' } }
-                    },
-                    plugins: { legend: { labels: { color: '#e5e5e5' } } }
+                const totalHours = Math.floor(totalMinutes / 60);
+                const totalOvertimeHours = Math.floor(totalOvertimeMinutes / 60);
+                const totalSalary = ((totalHours - totalOvertimeHours) * hourlyRate) + (totalOvertimeHours * overtimeRate);
+
+                return {
+                    totalHours: totalHours,
+                    totalOvertimeHours: totalOvertimeHours,
+                    totalPresentDays: totalPresentDays,
+                    totalSalary: totalSalary
+                };
+            }
+
+            function renderPerformance() {
+                const entries = loadEntries();
+                const stats = calculateTimeAndSalary(entries);
+
+                totalPresentDaysElement.textContent = stats.totalPresentDays;
+                totalHoursElement.textContent = stats.totalHours;
+                totalOvertimeHoursElement.textContent = stats.totalOvertimeHours;
+                totalSalaryElement.textContent = `Rs. ${stats.totalSalary.toFixed(2)}`;
+            }
+
+            saveBtn.addEventListener('click', () => {
+                const date = dateInput.value;
+                const inTime = inTimeInput.value;
+                const outTime = outTimeInput.value;
+
+                if (!date || !inTime || !outTime) {
+                    showMessage('Please fill all the fields.');
+                    return;
+                }
+
+                const entries = loadEntries();
+                entries.push({ date, inTime, outTime });
+                saveEntries(entries);
+                showMessage('Attendance saved successfully!');
+                dateInput.value = '';
+                inTimeInput.value = '';
+                outTimeInput.value = '';
+                
+                // Update performance view if it's visible
+                if (!performanceCard.classList.contains('hidden')) {
+                    renderPerformance();
                 }
             });
-        }
-        
-        function saveSettings() {
-            settings = { dailyWage: dailyWageInput.value, overtimeRate: overtimeRateInput.value };
-            localStorage.setItem('settings', JSON.stringify(settings));
-            renderAll();
-        }
 
-        function exportData() {
-            let text = `Attendance Report\nTotal Salary: ${totalSalaryEl.textContent}\n\n`;
-            Object.keys(attendanceData).sort().forEach(date => {
-                const e = attendanceData[date];
-                text += `${date}: ${e.in}-${e.out} | Hours: ${e.workedHours} | Overtime: ${e.overtimeHours} | Salary: ${e.salary}\n`;
-            });
-            navigator.clipboard.writeText(text).then(() => showMessage('Report copied to clipboard!'))
-            .catch(() => showMessage('Failed to copy.'));
-        }
-
-        let scene, camera, renderer, cube;
-        function init3D() {
-            const container = $('#threeDContainer');
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas: $('#threeDCanvas'), alpha: true, antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-            const material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-            cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-            const pLight = new THREE.PointLight(0xffffff, 1);
-            pLight.position.set(5, 5, 5);
-            scene.add(pLight);
-            camera.position.z = 3;
-
-            let isDragging = false, previousMousePosition = { x: 0, y: 0 };
-            container.addEventListener('mousedown', e => isDragging = true);
-            container.addEventListener('mouseup', e => isDragging = false);
-            container.addEventListener('mouseleave', e => isDragging = false);
-            container.addEventListener('mousemove', e => {
-                if (!isDragging) return;
-                const deltaMove = { x: e.offsetX - previousMousePosition.x, y: e.offsetY - previousMousePosition.y };
-                cube.rotation.y += deltaMove.x * 0.01;
-                cube.rotation.x += deltaMove.y * 0.01;
-                previousMousePosition = { x: e.offsetX, y: e.offsetY };
+            viewBtn.addEventListener('click', () => {
+                renderPerformance();
+                mainCard.classList.add('hidden');
+                performanceCard.classList.remove('hidden');
             });
 
-            const animate = () => {
-                requestAnimationFrame(animate);
-                if (!isDragging) {
-                    cube.rotation.x += 0.005;
-                    cube.rotation.y += 0.005;
+            backBtn.addEventListener('click', () => {
+                mainCard.classList.remove('hidden');
+                performanceCard.classList.add('hidden');
+            });
+
+            copyBtn.addEventListener('click', () => {
+                const entries = loadEntries();
+                if (entries.length === 0) {
+                    showMessage('No data to copy.');
+                    return;
                 }
-                renderer.render(scene, camera);
-            };
-            animate();
-        }
+                const stats = calculateTimeAndSalary(entries);
+                const textToCopy = `Total Present Days: ${stats.totalPresentDays}\nTotal Hours: ${stats.totalHours}\nOvertime Hours: ${stats.totalOvertimeHours}\nTotal Salary: Rs. ${stats.totalSalary.toFixed(2)}\n\n--- Detailed Records ---\n${JSON.stringify(entries, null, 2)}`;
+                
+                const tempTextarea = document.createElement('textarea');
+                tempTextarea.value = textToCopy;
+                document.body.appendChild(tempTextarea);
+                tempTextarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextarea);
 
-        function update3D(totalHours) {
-            if (!cube) return;
-            const green = Math.min(1, totalHours / 200);
-            cube.material.color.setRGB(1 - green, green, 0);
-        }
-        
-        window.addEventListener('resize', () => {
-            const container = $('#threeDContainer');
-            if (container) {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            }
+                showMessage('Data copied to clipboard!');
+            });
+
+            clearBtn.addEventListener('click', () => {
+                localStorage.removeItem(ATTENDANCE_KEY);
+                renderPerformance(); // Reset display
+                showMessage('All data has been cleared.');
+            });
         });
-
-        saveBtn.addEventListener('click', saveEntry);
-        clearBtn.addEventListener('click', () => showMessage('Are you sure you want to delete all data?', () => {
-            localStorage.removeItem('attendanceData');
-            attendanceData = {};
-            renderAll();
-            hideMessage();
-        }));
-        exportBtn.addEventListener('click', exportData);
-        dailyWageInput.addEventListener('change', saveSettings);
-        overtimeRateInput.addEventListener('change', saveSettings);
-        messageOkBtn.addEventListener('click', hideMessage);
-        viewPerformanceBtn.addEventListener('click', () => { mainPage.classList.add('hidden'); performancePage.classList.remove('hidden'); });
-        backBtn.addEventListener('click', () => { performancePage.classList.add('hidden'); mainPage.classList.remove('hidden'); });
-
-        window.onload = () => {
-            dailyWageInput.value = settings.dailyWage;
-            overtimeRateInput.value = settings.overtimeRate;
-            dateInput.value = new Date().toISOString().slice(0, 10);
-            renderAll();
-            init3D();
-        };
     </script>
 </body>
 </html>
-
